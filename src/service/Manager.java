@@ -20,11 +20,11 @@ public class Manager {
         return id;
     }
 
-    public String getEpicStatus(Epic epic) {
+    private void updateEpicStatus(Epic epic) {
         if (epic.getSubtaskId().equals(Collections.emptyList())) {
-            return "NEW";
+            epic.setStatus("NEW");
+            return;
         }
-        String status;
         boolean isStatusNew = false;
         boolean isStatusInProgress = false;
         boolean isStatusDone = false;
@@ -40,13 +40,12 @@ public class Manager {
             }
         }
         if (isStatusNew && !isStatusInProgress && !isStatusDone) {
-            status = "NEW";
+            epic.setStatus("NEW");
         } else if (isStatusDone && !isStatusNew && !isStatusInProgress) {
-            status = "DONE";
+            epic.setStatus("DONE");
         } else {
-            status = "IN_PROGRESS";
+            epic.setStatus("IN_PROGRESS");
         }
-        return status;
     }
 
     public Integer addTask(Task task) {
@@ -59,7 +58,7 @@ public class Manager {
     public Integer addEpic(Epic epic) {
         final int id = counterId();
         epic.setId(id);
-        epic.setStatus(getEpicStatus(epic));
+        updateEpicStatus(epic);
         epics.put(id, epic);
         return id;
     }
@@ -73,7 +72,7 @@ public class Manager {
         subtask.setId(id);
         subtasks.put(id, subtask);
         epic.getSubtaskId().add(id);
-        epic.setStatus(getEpicStatus(epic));
+        updateEpicStatus(epic);
         return id;
     }
 
@@ -103,7 +102,7 @@ public class Manager {
         }
         subtasks.put(id, subtask);
         Epic epic = epics.get(subtask.getEpicId());
-        epic.setStatus(getEpicStatus(epic));
+        updateEpicStatus(epic);
     }
 
     public ArrayList<Task> getTasks() {
@@ -148,7 +147,7 @@ public class Manager {
     public void delAllSubtasks() {
         for (Epic epic : epics.values()) {
             epic.getSubtaskId().clear();
-            epic.setStatus(getEpicStatus(epic));
+            updateEpicStatus(epic);
         }
         subtasks.clear();
     }
@@ -167,7 +166,7 @@ public class Manager {
     public void delSubtasksById(Integer id) {
         Epic epic = epics.get(subtasks.get(id).getEpicId());
         epic.getSubtaskId().remove(id);
-        epic.setStatus(getEpicStatus(epic));
+        updateEpicStatus(epic);
         subtasks.remove(id);
     }
 }

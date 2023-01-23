@@ -8,6 +8,14 @@ public class Subtask extends Task {
         this.epicId = epicId;
     }
 
+    public Integer getEpicId() {
+        return epicId;
+    }
+
+    public void setEpicId(Integer epicId) {
+        this.epicId = epicId;
+    }
+
     @Override
     public String toString() {
         return "model.Subtask{" +
@@ -17,13 +25,5 @@ public class Subtask extends Task {
                 ", status='" + status + '\'' +
                 ", epicId=" + epicId +
                 '}';
-    }
-
-    public Integer getEpicId() {
-        return epicId;
-    }
-
-    public void setEpicId(Integer epicId) {
-        this.epicId = epicId;
     }
 }
