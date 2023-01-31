@@ -28,7 +28,7 @@ public class Main {
         taskManager.getTaskById(task1Id);
 
         // Просмотрим историю показов задач
-        for (Task task : taskManager.getHistoryManager().getHistory()) {
+        for (Task task : taskManager.getHistory()) {
             System.out.println(task);
         }
 
@@ -40,7 +40,7 @@ public class Main {
         }
 
         // Просмотрим историю показов задач
-        for (Task task : taskManager.getHistoryManager().getHistory()) {
+        for (Task task : taskManager.getHistory()) {
             System.out.println(task);
         }
     }

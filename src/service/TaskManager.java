@@ -5,10 +5,10 @@ import model.Subtask;
 import model.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface TaskManager {
-    int counterId();
-    void updateEpicStatus(Epic epic);
+    List<Task> getHistory();
     Integer addTask(Task task);
     Integer addEpic(Epic epic);
     Integer addSubtask(Subtask subtask);
@@ -28,5 +28,4 @@ public interface TaskManager {
     void delTaskById(Integer id);
     void delEpicById(Integer id);
     void delSubtasksById(Integer id);
-    HistoryManager getHistoryManager();
 }

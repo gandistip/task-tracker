@@ -8,6 +8,7 @@ import model.Task;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
     Integer id = 0;
@@ -18,8 +19,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     HistoryManager historyManager = Managers.getDefaultHistory();
 
-    public HistoryManager getHistoryManager() {
-        return historyManager;
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
     }
 
     @Override
@@ -40,8 +42,12 @@ public class InMemoryTaskManager implements TaskManager {
         return subtasks.get(id);
     }
 
-    @Override
-    public void updateEpicStatus(Epic epic) {
+    private int counterId() {
+        id++;
+        return id;
+    }
+
+    private void updateEpicStatus(Epic epic) {
         if (epic.getSubtaskId().equals(Collections.emptyList())) {
             epic.setStatus(StatusOfTask.NEW);
             return;
@@ -67,12 +73,6 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             epic.setStatus(StatusOfTask.IN_PROGRESS);
         }
-    }
-
-    @Override
-    public int counterId() {
-        id++;
-        return id;
     }
 
     @Override
