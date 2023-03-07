@@ -1,16 +1,18 @@
 package model;
 
 public class Task {
-    String name;
-    String description;
     Integer id;
+    TypeOfTask type;
+    String name;
     StatusOfTask status;
+    String description;
 
-    public Task(String name, String description, Integer id, StatusOfTask status) {
-        this.name = name;
-        this.description = description;
+    public Task(Integer id, TypeOfTask type, String name, StatusOfTask status, String description) {
         this.id = id;
+        this.type = type;
+        this.name = name;
         this.status = status;
+        this.description = description;
     }
 
     public String getName() {
@@ -43,6 +45,14 @@ public class Task {
 
     public void setStatus(StatusOfTask status) {
         this.status = status;
+    }
+
+    public TypeOfTask getType() {
+        return type;
+    }
+
+    public void setType(TypeOfTask type) {
+        this.type = type;
     }
 
     @Override
