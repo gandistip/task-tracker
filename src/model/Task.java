@@ -1,18 +1,40 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Task {
     Integer id;
     TypeOfTask type;
     String name;
     StatusOfTask status;
     String description;
+    LocalDateTime startTime;
+    Duration duration;
+    LocalDateTime endTime;
 
-    public Task(Integer id, TypeOfTask type, String name, StatusOfTask status, String description) {
+    public Task(Integer id, TypeOfTask type, String name, StatusOfTask status, String description,
+                LocalDateTime startTime, Duration duration) {
         this.id = id;
         this.type = type;
         this.name = name;
         this.status = status;
         this.description = description;
+        this.startTime = startTime;
+        this.duration = duration;
+        setEndTime();
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime() {
+        if (startTime == null || duration == null) {
+            this.endTime = null;
+        } else {
+            this.endTime = startTime.plus(duration);
+        }
     }
 
     public String getName() {
@@ -55,13 +77,33 @@ public class Task {
         this.type = type;
     }
 
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
     @Override
     public String toString() {
-        return "model.Task{" +
-                "name='" + name + '\'' +
+        return "Task{" +
+                "id=" + id +
+                ", type=" + type +
+                ", name='" + name + '\'' +
+                ", status=" + status +
                 ", description='" + description + '\'' +
-                ", id=" + id +
-                ", status='" + status + '\'' +
+                ", startTime=" + startTime +
+                ", duration=" + duration +
+                ", endTime=" + endTime +
                 '}';
     }
 }
