@@ -1,21 +1,14 @@
 import exceptions.InputException;
 import model.Task;
 import model.TypeOfTask;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import service.FileBackedTasksManager;
 import service.Managers;
-import service.TaskManager;
 
 import java.io.*;
-import java.lang.reflect.Array;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Scanner;
 
 import static model.StatusOfTask.NEW;
 import static org.junit.jupiter.api.Assertions.*;

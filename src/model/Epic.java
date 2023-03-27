@@ -6,11 +6,16 @@ import java.util.ArrayList;
 
 public class Epic extends Task {
     private ArrayList<Integer> subtaskId;
+    private LocalDateTime endTime;
 
     public Epic(Integer id, TypeOfTask type, String name, StatusOfTask status, String description,
                 LocalDateTime startTime, Duration duration, ArrayList<Integer> subtaskId) {
         super(id, type, name, status, description, startTime, duration);
         this.subtaskId = subtaskId;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     public ArrayList<Integer> getSubtaskId() {
@@ -19,10 +24,6 @@ public class Epic extends Task {
 
     public void setSubtaskId(ArrayList<Integer> subtaskId) {
         this.subtaskId = subtaskId;
-    }
-
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
     }
 
     @Override
