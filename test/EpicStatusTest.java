@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import service.Managers;
 import service.TaskManager;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,6 +21,9 @@ public class EpicStatusTest {
             null,null,
             new ArrayList<>());
     int e1Id = taskManager.addEpic(e1);
+
+    public EpicStatusTest() throws IOException, InterruptedException {
+    }
 
     @Test
     public void statusEpicEmpty() {

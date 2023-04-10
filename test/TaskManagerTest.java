@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import service.Managers;
 import service.TaskManager;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class TaskManagerTest {
             new ArrayList<>());
     int e2Id = taskManager.addEpic(e2);
 
-    public TaskManagerTest() throws InputException {
+    public TaskManagerTest() throws InputException, IOException, InterruptedException {
     }
 
     @Test

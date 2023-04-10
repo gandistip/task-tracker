@@ -11,13 +11,14 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
-    Integer id = 0;
 
-    HashMap<Integer, Task> tasks = new HashMap<>();
-    HashMap<Integer, Epic> epics = new HashMap<>();
-    HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    public Integer id = 0;
 
-    HistoryManager historyManager = Managers.getDefaultHistory();
+    public HashMap<Integer, Task> tasks = new HashMap<>();
+    public HashMap<Integer, Epic> epics = new HashMap<>();
+    public HashMap<Integer, Subtask> subtasks = new HashMap<>();
+
+    public HistoryManager historyManager = Managers.getDefaultHistory();
 
     private int counterId() {
         id++;

@@ -1,5 +1,6 @@
 package service;
 
+import com.google.gson.annotations.Expose;
 import model.Node;
 import model.Task;
 
@@ -8,7 +9,6 @@ import java.util.*;
 public class InMemoryHistoryManager implements HistoryManager {
     Node first;
     Node last;
-
     Map<Integer, Node> nodes = new HashMap<>();
 
     private void linkLast(Task task) {

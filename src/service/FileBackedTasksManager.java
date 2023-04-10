@@ -9,8 +9,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager {
 
@@ -21,12 +19,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
     }
 
     public static FileBackedTasksManager loadFromFile(File file) throws InputException {
-        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
-
+        FileBackedTasksManager fileBackedTasksManager = Managers.getTaskManagerFile();
         if (file.length() == 0) {
             throw new InputException("Файл пуст");
         }
-
         List<String> linesInFile = new ArrayList<>();
         try (BufferedReader fileReader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
             while (fileReader.ready()) {
@@ -39,7 +35,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
             System.out.println("Произошла ошибка во время чтения файла.");
             e.printStackTrace();
         }
-
         int countTasksInFile;
         boolean isExistHistory = false;
         String lastLine = linesInFile.get(linesInFile.size() - 1);
@@ -73,7 +68,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         return fileBackedTasksManager;
     }
 
-    private void save() {
+    public void save() {
         List<Task> allTask = new ArrayList<>();
         allTask.addAll(getTasks());
         allTask.addAll(getEpics());
@@ -89,7 +84,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         }
     }
 
-    private String toString(Task task) {
+    protected String toString(Task task) {
         String taskString;
         taskString = String.format("%s,%s,%s,%s,%s,%s,%s,%s,",
                 task.getId(),
@@ -140,7 +135,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         return null;
     }
 
-    private static String historyToString(HistoryManager manager) {
+    protected static String historyToString(HistoryManager manager) {
         StringBuilder historyString = new StringBuilder();
         for (Task task : manager.getHistory()) {
             historyString.append(task.getId() + ",");

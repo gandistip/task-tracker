@@ -14,8 +14,8 @@ import static model.StatusOfTask.NEW;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FileBackedTasksManagerTest {
-    File file = new File("fileTest.csv");
-    FileBackedTasksManager taskManagerFile = Managers.getDefaultFile(file);
+    File file = new File("file.csv");
+    FileBackedTasksManager taskManagerFile = Managers.getTaskManagerFile();
 
     Task t1 = new Task(
             0, TypeOfTask.TASK,"t1",NEW,"d",
@@ -29,7 +29,7 @@ public class FileBackedTasksManagerTest {
 
     @BeforeEach
     public void cleaContentFile() throws IOException {
-        new PrintWriter("fileTest.csv").close();
+        new PrintWriter(file).close();
     }
 
     @Test

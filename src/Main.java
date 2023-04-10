@@ -1,111 +1,94 @@
 import exceptions.InputException;
+import http.HttpTaskManager;
 import model.*;
-import service.FileBackedTasksManager;
+import http.KVServer;
 import service.Managers;
-import service.TaskManager;
-
-import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-
-import static model.StatusOfTask.NEW;
+import static model.StatusOfTask.*;
+import static model.TypeOfTask.*;
 
 public class Main {
-    public static void main(String[] args) throws InputException {
+    public static void main(String[] args) throws InputException, IOException, InterruptedException {
 
-        File file = new File("file.csv");
+        new KVServer().start();
 
-        TaskManager taskManagerFile = Managers.getDefaultFile(file);
+        System.out.println("1. Создадим HttpTaskManager и задачи");
+        HttpTaskManager taskManager = Managers.getDefault();
 
-        System.out.println("Создадим задачи (2 задачи, 1 эпик с 3 подзадачами,1 эпик без подзадач)");
-        Task t1 = new Task(
-                0,TypeOfTask.TASK,"t1",NEW,"d",
+        Task t1 = new Task(0, TASK,"t1",NEW,"d",
                 LocalDateTime.of(2023,01,1,1,0),Duration.ofMinutes(1));
-        int t1Id = taskManagerFile.addTask(t1);
-
-        Task t2 = new Task(
-                0,TypeOfTask.TASK,"t2",NEW,"d",
+        int t1Id = taskManager.addTask(t1);
+        Task t2 = new Task(0, TASK,"t2",NEW,"d",
                 LocalDateTime.of(2023,01,1,2,0),Duration.ofMinutes(1));
-        int t2Id = taskManagerFile.addTask(t2);
+        int t2Id = taskManager.addTask(t2);
 
-        Epic e1 = new Epic(
-                0,TypeOfTask.EPIC,"e1",NEW,"d",
-                null,null,
-                new ArrayList<>());
-        int e1Id = taskManagerFile.addEpic(e1);
+        Epic e1 = new Epic(0, EPIC,"e1",NEW,"d",
+                null,null, new ArrayList<>());
+        int e1Id = taskManager.addEpic(e1);
+        Epic e2 = new Epic(0, EPIC,"e2",NEW,"d",
+                null,null, new ArrayList<>());
+        int e2Id = taskManager.addEpic(e2);
 
-        Subtask s1 = new Subtask(
-                0,TypeOfTask.SUBTASK,"s1",NEW,"d",
-                LocalDateTime.of(2023,01,1,3,0),Duration.ofMinutes(1),
-                e1Id);
-        int s1Id = taskManagerFile.addSubtask(s1);
-
-        Subtask s2 = new Subtask(
-                0,TypeOfTask.SUBTASK,"s2",NEW,"d",
-                LocalDateTime.of(2023,01,1,4,0),Duration.ofMinutes(1),
-                e1Id);
-        int s2Id = taskManagerFile.addSubtask(s2);
-
-        Subtask s3 = new Subtask(
-                0,TypeOfTask.SUBTASK,"s3",NEW,"d",
-                LocalDateTime.of(2023,01,1,5,0),Duration.ofMinutes(1),
-                e1Id);
-        int s3Id = taskManagerFile.addSubtask(s3);
-
-        Epic e2 = new Epic(
-                0,TypeOfTask.EPIC,"e2",NEW,"d",
-                null,null,
-                new ArrayList<>());
-        int e2Id = taskManagerFile.addEpic(e2);
+        Subtask s1 = new Subtask(0, SUBTASK,"s1",NEW,"d",
+                LocalDateTime.of(2023,01,1,3,0),Duration.ofMinutes(1), e1Id);
+        int s1Id = taskManager.addSubtask(s1);
+        Subtask s2 = new Subtask(0, SUBTASK,"s2",NEW,"d",
+                LocalDateTime.of(2023,01,1,4,0),Duration.ofMinutes(1), e1Id);
+        int s2Id = taskManager.addSubtask(s2);
 
         System.out.println("\nСписок всех задач");
-        for (Task task : taskManagerFile.getTasks()) { System.out.println(task); }
-        for (Task task : taskManagerFile.getEpics()) { System.out.println(task); }
-        for (Task task : taskManagerFile.getSubtasks()) { System.out.println(task); }
-
-        System.out.println("\nОтсортированные по дате задачи и подзадачи");
-        for (Object prioritizedTask : taskManagerFile.getPrioritizedTasks()) {
-            System.out.println(prioritizedTask);
-        }
+        for (Task task : taskManager.getTasks()) { System.out.println(task); }
+        for (Task task : taskManager.getEpics()) { System.out.println(task); }
+        for (Task task : taskManager.getSubtasks()) { System.out.println(task); }
 
         System.out.println("\nЗапросим задачи для создания истории просмотров задач");
-        System.out.println(taskManagerFile.getTaskById(t1Id));
-        System.out.println(taskManagerFile.getTaskById(t1Id));
-        System.out.println(taskManagerFile.getTaskById(t2Id));
-        System.out.println(taskManagerFile.getEpicById(e1Id));
-        System.out.println(taskManagerFile.getSubtaskById(s1Id));
-        System.out.println(taskManagerFile.getSubtaskById(s2Id));
-        System.out.println(taskManagerFile.getSubtaskById(s3Id));
-        System.out.println(taskManagerFile.getSubtaskById(s2Id));
-        System.out.println(taskManagerFile.getEpicById(e2Id));
-        System.out.println(taskManagerFile.getEpicById(e2Id));
+        System.out.println(taskManager.getTaskById(t1Id));
+        System.out.println(taskManager.getTaskById(t1Id));
+        System.out.println(taskManager.getTaskById(t2Id));
+        System.out.println(taskManager.getEpicById(e1Id));
+        System.out.println(taskManager.getSubtaskById(s1Id));
+        System.out.println(taskManager.getSubtaskById(s2Id));
+        System.out.println(taskManager.getSubtaskById(s2Id));
+        System.out.println(taskManager.getEpicById(e2Id));
+        System.out.println(taskManager.getEpicById(e2Id));
 
         System.out.println("\nИстория просмотров задач");
-        for (Task task : taskManagerFile.getHistory()) { System.out.println(task); }
+        for (Task task : taskManager.getHistory()) { System.out.println(task); }
 
-        System.out.println("\nУдалим задачу t1 и эпик e1 содержащий подзадачи");
-        taskManagerFile.delTaskById(t1Id);
-        taskManagerFile.delEpicById(e1Id);
-
-        System.out.println("\nСписок всех задач");
-        for (Task task : taskManagerFile.getTasks()) { System.out.println(task); }
-        for (Task task : taskManagerFile.getEpics()) { System.out.println(task); }
-        for (Task task : taskManagerFile.getSubtasks()) { System.out.println(task); }
-
-        System.out.println("\nИстория просмотров задач");
-        for (Task task : taskManagerFile.getHistory()) { System.out.println(task); }
-
-        System.out.println("\nВосстановим задачи из CSV");
-        TaskManager taskManagerFileBackup = FileBackedTasksManager.loadFromFile(file);
+        System.out.println("\n2. Восстановим задачи из KVServer в новый HttpTaskManager");
+        HttpTaskManager loadTaskManager = Managers.getDefault();
+        loadTaskManager.load();
 
         System.out.println("\nВосстановленные задачи");
-        for (Task task : taskManagerFile.getTasks()) { System.out.println(task); }
-        for (Task task : taskManagerFile.getEpics()) { System.out.println(task); }
-        for (Task task : taskManagerFile.getSubtasks()) { System.out.println(task); }
+        for (Task task : loadTaskManager.getTasks()) { System.out.println(task); }
+        for (Task task : loadTaskManager.getEpics()) { System.out.println(task); }
+        for (Task task : loadTaskManager.getSubtasks()) { System.out.println(task); }
 
         System.out.println("\nВосстановленная история просмотров задач");
-        for (Task task : taskManagerFileBackup.getHistory()) { System.out.println(task); }
+        for (Task task : loadTaskManager.getHistory()) { System.out.println(task); }
+
+        System.out.println("\nДобавим задачу t3");
+        Task t3 = new Task(0, TASK,"t1",NEW,"d",
+                LocalDateTime.of(2023,01,1,6,0),Duration.ofMinutes(1));
+        int t3Id = loadTaskManager.addTask(t3);
+
+        System.out.println("\nЗапросим новую задачу t3 для проверки формирования истории");
+        System.out.println(loadTaskManager.getTaskById(t3Id));
+
+        System.out.println("\nУдалим задачу t1 и эпик e1 содержащий подзадачи");
+        loadTaskManager.delTaskById(t1Id);
+        loadTaskManager.delEpicById(e1Id);
+
+        System.out.println("\nСписок всех задач");
+        for (Task task : loadTaskManager.getTasks()) { System.out.println(task); }
+        for (Task task : loadTaskManager.getEpics()) { System.out.println(task); }
+        for (Task task : loadTaskManager.getSubtasks()) { System.out.println(task); }
+
+        System.out.println("\nИстория просмотров задач");
+        for (Task task : loadTaskManager.getHistory()) { System.out.println(task); }
 
     }
 }
