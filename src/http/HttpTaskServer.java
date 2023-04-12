@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 
 public class HttpTaskServer {
 
-    public static final int PORT = 8080;
+    public static final int PORT = 8088;
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     private HttpServer server;
     private Gson gson;

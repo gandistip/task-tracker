@@ -11,7 +11,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 
 public class KVServer {
-    public static final int PORT = 8078;
+    public static final int PORT = 8077;
     private final String apiToken;
     private final HttpServer server;
     private final Map<String, String> data = new HashMap<>();

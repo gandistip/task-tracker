@@ -1,7 +1,6 @@
 package http;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import exceptions.ManagerSaveException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -12,7 +11,6 @@ import java.net.http.HttpResponse;
 public class KVTaskClient {
     URI urlKVServer;
     String token;
-    Gson gson = new GsonBuilder().create();
     HttpClient client = HttpClient.newHttpClient();
 
     public KVTaskClient(URI urlKVServer) {
@@ -23,10 +21,12 @@ public class KVTaskClient {
                 .build();
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                throw new ManagerSaveException("Can't do save request, status code: " + response.statusCode());
+            }
             token = response.body();
-        } catch (NullPointerException | IOException | InterruptedException e) {
-            System.out.println("Во время выполнения запроса возникла ошибка.\n" +
-                    "Проверьте, пожалуйста, адрес и повторите попытку.");
+        } catch (NullPointerException | IOException | InterruptedException | ManagerSaveException e) {
+            throw new RuntimeException("Can't do save request", e);
         }
     }
 
@@ -36,27 +36,30 @@ public class KVTaskClient {
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
         try {
-            client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (NullPointerException | IOException | InterruptedException e) {
-            System.out.println("Во время выполнения запроса возникла ошибка.\n" +
-                    "Проверьте, пожалуйста, адрес и повторите попытку.");
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                throw new ManagerSaveException("Can't do save request, status code: " + response.statusCode());
+            }
+        } catch (NullPointerException | IOException | InterruptedException | ManagerSaveException e) {
+            throw new RuntimeException("Can't do save request", e);
         }
 
     }
 
-    public String load(String key) {
+    public String load(String key) throws ManagerSaveException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(urlKVServer.toString() + "/load/" + key + "?API_TOKEN=" + token))
                 .GET()
                 .build();
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                throw new ManagerSaveException("Can't do save request, status code: " + response.statusCode());
+            }
             return response.body();
         } catch (NullPointerException | IOException | InterruptedException e) {
-            System.out.println("Во время выполнения запроса возникла ошибка.\n" +
-                    "Проверьте, пожалуйста, адрес и повторите попытку.");
+            throw new ManagerSaveException("Can't do save request");
         }
-        return null;
     }
 
 }

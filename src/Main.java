@@ -13,7 +13,8 @@ import static model.TypeOfTask.*;
 public class Main {
     public static void main(String[] args) throws InputException, IOException, InterruptedException {
 
-        new KVServer().start();
+        KVServer kvServer = new KVServer();
+        kvServer.start();
 
         System.out.println("1. Создадим HttpTaskManager и задачи");
         HttpTaskManager taskManager = Managers.getDefault();
@@ -60,7 +61,6 @@ public class Main {
 
         System.out.println("\n2. Восстановим задачи из KVServer в новый HttpTaskManager");
         HttpTaskManager loadTaskManager = Managers.getDefault();
-        loadTaskManager.load();
 
         System.out.println("\nВосстановленные задачи");
         for (Task task : loadTaskManager.getTasks()) { System.out.println(task); }
@@ -89,6 +89,8 @@ public class Main {
 
         System.out.println("\nИстория просмотров задач");
         for (Task task : loadTaskManager.getHistory()) { System.out.println(task); }
+
+        kvServer.stop();
 
     }
 }

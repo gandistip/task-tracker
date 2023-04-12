@@ -52,34 +52,34 @@ class HttpTaskServerTest {
                 LocalDateTime.of(2023,01,1,4,0),Duration.ofMinutes(1), 3);
 
         HttpRequest requestT1 = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/tasks/task"))
+                .uri(URI.create("http://localhost:8088/tasks/task"))
                 .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(t1))).build();
         HttpResponse<String> responseT1 = client.send(requestT1, HttpResponse.BodyHandlers.ofString());
         assertEquals(responseT1.body(), "Задача добавлена");
         HttpRequest requestT2 = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/tasks/task"))
+                .uri(URI.create("http://localhost:8088/tasks/task"))
                 .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(t2))).build();
         HttpResponse<String> responseT2 = client.send(requestT2, HttpResponse.BodyHandlers.ofString());
         assertEquals(responseT2.body(), "Задача добавлена");
 
         HttpRequest requestE1 = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/tasks/epic"))
+                .uri(URI.create("http://localhost:8088/tasks/epic"))
                 .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(e1))).build();
         HttpResponse<String> responseE1 = client.send(requestE1, HttpResponse.BodyHandlers.ofString());
         assertEquals(responseE1.body(), "Эпик добавлен");
         HttpRequest requestE2 = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/tasks/epic"))
+                .uri(URI.create("http://localhost:8088/tasks/epic"))
                 .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(e2))).build();
         HttpResponse<String> responseE2 = client.send(requestE2, HttpResponse.BodyHandlers.ofString());
         assertEquals(responseE2.body(), "Эпик добавлен");
 
         HttpRequest requestS1 = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/tasks/subtask"))
+                .uri(URI.create("http://localhost:8088/tasks/subtask"))
                 .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(s1))).build();
         HttpResponse<String> responseS1 = client.send(requestS1, HttpResponse.BodyHandlers.ofString());
         assertEquals(responseS1.body(), "Подзадача добавлена");
         HttpRequest requestS2 = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/tasks/subtask"))
+                .uri(URI.create("http://localhost:8088/tasks/subtask"))
                 .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(s2))).build();
         HttpResponse<String> responseS2 = client.send(requestS2, HttpResponse.BodyHandlers.ofString());
         assertEquals(responseS2.body(), "Подзадача добавлена");
@@ -90,7 +90,7 @@ class HttpTaskServerTest {
 
     @Test
     void getTask() throws IOException, InterruptedException {
-        URI url = URI.create("http://localhost:8080/tasks/task/?id=1");
+        URI url = URI.create("http://localhost:8088/tasks/task/?id=1");
         HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -101,7 +101,7 @@ class HttpTaskServerTest {
 
     @Test
     void getEpic() throws IOException, InterruptedException {
-        URI url = URI.create("http://localhost:8080/tasks/epic/?id=3");
+        URI url = URI.create("http://localhost:8088/tasks/epic/?id=3");
         HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -112,7 +112,7 @@ class HttpTaskServerTest {
 
     @Test
     void getSubtask() throws IOException, InterruptedException {
-        URI url = URI.create("http://localhost:8080/tasks/subtask/?id=5");
+        URI url = URI.create("http://localhost:8088/tasks/subtask/?id=5");
         HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -123,7 +123,7 @@ class HttpTaskServerTest {
 
     @Test
     void delTask() throws IOException, InterruptedException {
-        URI url = URI.create("http://localhost:8080/tasks/task/?id=1");
+        URI url = URI.create("http://localhost:8088/tasks/task/?id=1");
         HttpRequest request = HttpRequest.newBuilder().uri(url).DELETE().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -133,7 +133,7 @@ class HttpTaskServerTest {
 
     @Test
     void delEpic() throws IOException, InterruptedException {
-        URI url = URI.create("http://localhost:8080/tasks/epic/?id=3");
+        URI url = URI.create("http://localhost:8088/tasks/epic/?id=3");
         HttpRequest request = HttpRequest.newBuilder().uri(url).DELETE().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -143,7 +143,7 @@ class HttpTaskServerTest {
 
     @Test
     void delSubtask() throws IOException, InterruptedException {
-        URI url = URI.create("http://localhost:8080/tasks/subtask/?id=5");
+        URI url = URI.create("http://localhost:8088/tasks/subtask/?id=5");
         HttpRequest request = HttpRequest.newBuilder().uri(url).DELETE().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -153,7 +153,7 @@ class HttpTaskServerTest {
 
     @Test
     void getAllTasks() throws IOException, InterruptedException {
-        URI url = URI.create("http://localhost:8080/tasks");
+        URI url = URI.create("http://localhost:8088/tasks");
         HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -163,7 +163,7 @@ class HttpTaskServerTest {
 
     @Test
     void getTasks() throws IOException, InterruptedException {
-        URI url = URI.create("http://localhost:8080/tasks/task");
+        URI url = URI.create("http://localhost:8088/tasks/task");
         HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -173,7 +173,7 @@ class HttpTaskServerTest {
 
     @Test
     void getEpics() throws IOException, InterruptedException {
-        URI url = URI.create("http://localhost:8080/tasks/epic");
+        URI url = URI.create("http://localhost:8088/tasks/epic");
         HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -183,7 +183,7 @@ class HttpTaskServerTest {
 
     @Test
     void getSubtasks() throws IOException, InterruptedException {
-        URI url = URI.create("http://localhost:8080/tasks/subtask");
+        URI url = URI.create("http://localhost:8088/tasks/subtask");
         HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -193,7 +193,7 @@ class HttpTaskServerTest {
 
     @Test
     void getHistory() throws IOException, InterruptedException {
-        URI url = URI.create("http://localhost:8080/tasks/history");
+        URI url = URI.create("http://localhost:8088/tasks/history");
         HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -203,7 +203,7 @@ class HttpTaskServerTest {
 
     @Test
     void getSubtasksOfEpic() throws IOException, InterruptedException {
-        URI url = URI.create("http://localhost:8080/tasks/subtask/epic/?id=3");
+        URI url = URI.create("http://localhost:8088/tasks/subtask/epic/?id=3");
         HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 

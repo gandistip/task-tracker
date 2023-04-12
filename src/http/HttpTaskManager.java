@@ -2,6 +2,7 @@ package http;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import exceptions.ManagerSaveException;
 import model.Epic;
 import model.Subtask;
 import model.Task;
@@ -21,6 +22,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
     public HttpTaskManager(File file, URI urlKVServer) {
         super(file);
         kvTaskClient = new KVTaskClient(urlKVServer);
+        load();
     }
 
     @Override
@@ -34,8 +36,13 @@ public class HttpTaskManager extends FileBackedTasksManager {
         kvTaskClient.put(key, gson.toJson(manager));
     }
 
-    public void load() {
-        String managerString = kvTaskClient.load(key);
+    private void load() {
+        String managerString = "";
+        try {
+            managerString = kvTaskClient.load(key);
+        } catch (ManagerSaveException e) {
+            return;
+        }
         Map<String, String> manager = gson.fromJson(managerString, new TypeToken<Map<String, String>>(){}.getType());
         tasks = gson.fromJson(manager.get("tasks"), new TypeToken<Map<Integer,Task>>(){}.getType());
         epics = gson.fromJson(manager.get("epics"), new TypeToken<Map<Integer,Epic>>(){}.getType());
